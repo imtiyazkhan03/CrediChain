@@ -1,0 +1,32 @@
+{
+  "contractName": "AcademicCertificateRegistry",
+  "status": "COMPILED_AND_TEST_VERIFIED",
+  "deploymentStatus": {
+    "isDeployedOnLiveNetwork": false,
+    "note": "Smart contract has passed 46/46 automated unit tests on an EVM environment. Live testnet deployment (Sepolia/Amoy) has NOT yet been executed. Follow the Remix IDE instructions below to deploy."
+  },
+  "networks": {
+    "11155111": {
+      "networkName": "Ethereum Sepolia Testnet",
+      "address": "",
+      "explorerUrl": "https://sepolia.etherscan.io/address/"
+    },
+    "80002": {
+      "networkName": "Polygon Amoy Testnet",
+      "address": "",
+      "explorerUrl": "https://amoy.polygonscan.com/address/"
+    },
+    "31337": {
+      "networkName": "Hardhat / Local EVM",
+      "address": "",
+      "explorerUrl": ""
+    }
+  },
+  "compiler": {
+    "version": "0.8.20",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    }
+  }
+}

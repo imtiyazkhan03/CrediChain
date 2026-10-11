@@ -1,0 +1,589 @@
+{
+  "contractName": "AcademicCertificateRegistry",
+  "compilerVersion": "0.8.37+commit.f401782d.Emscripten.clang",
+  "compiledAt": "2026-10-10T07:40:42.081Z",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "admin",
+          "type": "address"
+        }
+      ],
+      "name": "AdminAlreadyRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "admin",
+          "type": "address"
+        }
+      ],
+      "name": "AdminNotRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CannotRemoveLastAdmin",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        }
+      ],
+      "name": "CertificateAlreadyExists",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        }
+      ],
+      "name": "CertificateAlreadyRevoked",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        }
+      ],
+      "name": "CertificateDoesNotExist",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidCertificateId",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidDocumentHash",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidReasonCode",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidZeroAddress",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        }
+      ],
+      "name": "IssuerAlreadyAuthorized",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "caller",
+          "type": "address"
+        }
+      ],
+      "name": "IssuerNotAuthorized",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        }
+      ],
+      "name": "IssuerNotRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "caller",
+          "type": "address"
+        }
+      ],
+      "name": "UnauthorizedAdmin",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "admin",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isEnabled",
+          "type": "bool"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "changedBy",
+          "type": "address"
+        }
+      ],
+      "name": "AdminStatusChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "string",
+          "name": "certIdHash",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "documentHash",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "issuedAt",
+          "type": "uint64"
+        }
+      ],
+      "name": "CertificateIssued",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "string",
+          "name": "certIdHash",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "revokedBy",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "revokedAt",
+          "type": "uint64"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "reasonCode",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "reasonRef",
+          "type": "bytes32"
+        }
+      ],
+      "name": "CertificateRevoked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isAuthorized",
+          "type": "bool"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "authorizedBy",
+          "type": "address"
+        }
+      ],
+      "name": "IssuerAuthorizationChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newAdmin",
+          "type": "address"
+        }
+      ],
+      "name": "addAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "adminCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        }
+      ],
+      "name": "authorizeIssuer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        }
+      ],
+      "name": "certificateExists",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "exists",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        }
+      ],
+      "name": "deauthorizeIssuer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        }
+      ],
+      "name": "getCertificate",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "documentHash",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint64",
+          "name": "issuedAt",
+          "type": "uint64"
+        },
+        {
+          "internalType": "bool",
+          "name": "isRevoked",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint64",
+          "name": "revokedAt",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint16",
+          "name": "reasonCode",
+          "type": "uint16"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "reasonRef",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isAdmin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isAuthorizedIssuer",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "documentHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "issueCertificate",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "admin",
+          "type": "address"
+        }
+      ],
+      "name": "removeAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        },
+        {
+          "internalType": "uint16",
+          "name": "reasonCode",
+          "type": "uint16"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "reasonRef",
+          "type": "bytes32"
+        }
+      ],
+      "name": "revokeCertificate",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalIssued",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalRevoked",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "certId",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "candidateHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "verifyCertificate",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isValid",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "isRevoked",
+          "type": "bool"
+        },
+        {
+          "internalType": "address",
+          "name": "issuer",
+          "type": "address"
+        },
+        {
+          "internalType": "uint64",
+          "name": "issuedAt",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600e575f5ffd5b505f80546001600160a01b031916339081178255808252600460209081526040808420805460ff199081166001908117909255600590935281852080549093168117909255908055519091907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a360405160018152339081907fa9985bfe49f6c17bb0f43e62d7219c56755d841001f08a8fecb1b3f915390bb59060200160405180910390a360405160018152339081907f30a462126b4548fc01736cb875141594c6b8ccc30102d880ffea5707eebd58db9060200160405180910390a3610f93806100fc5f395ff3fe608060405234801561000f575f5ffd5b50600436106100fb575f3560e01c806362c985c311610093578063e62ce7ac11610063578063e62ce7ac1461026d578063ed0f2e7514610276578063f2fde38b146102d9578063f5be3193146102ec575f5ffd5b806362c985c31461020a578063704802751461021d5780638da5cb5b14610230578063bba41f821461025a575f5ffd5b80632b7832b3116100ce5780632b7832b3146101ab57806331ba1966146101c25780633a71daf4146101e4578063436693d5146101f7575f5ffd5b80630655f037146100ff57806307b86b73146101275780631785f53c1461017457806324d7806c14610189575b5f5ffd5b61011261010d366004610d92565b6102f5565b60405190151581526020015b60405180910390f35b61013a610135366004610dd0565b610336565b60405161011e9493929190931515845291151560208401526001600160a01b031660408301526001600160401b0316606082015260800190565b610187610182366004610e17565b6103e0565b005b610112610197366004610e17565b60046020525f908152604090205460ff1681565b6101b460015481565b60405190815260200161011e565b6101126101d0366004610e17565b60056020525f908152604090205460ff1681565b6101876101f2366004610e17565b6104dc565b610187610205366004610e17565b6105a1565b610187610218366004610dd0565b610696565b61018761022b366004610e17565b6108c4565b5f54610242906001600160a01b031681565b6040516001600160a01b03909116815260200161011e565b610187610268366004610e44565b6109bf565b6101b460035481565b610289610284366004610d92565b610b5f565b604080519788526001600160a01b0390961660208801526001600160401b0394851695870195909552911515606086015291909116608084015261ffff1660a083015260c082015260e00161011e565b6101876102e7366004610e17565b610c20565b6101b460025481565b5f60068383604051610308929190610ea2565b908152604051908190036020019020600101546001600160401b03600160a01b909104161515905092915050565b5f5f5f5f5f6006888860405161034d929190610ea2565b90815260405190819003602001902060018101549091506001600160401b03600160a01b909104165f0361038d575f5f5f5f9450945094509450506103d7565b80546001820154600160e01b900460ff16945086148080156103ad575084155b600190920154919550506001600160a01b03811692506001600160401b03600160a01b9091041690505b93509350935093565b335f9081526004602052604090205460ff166104165760405163089210c760e11b81523360048201526024015b60405180910390fd5b6001600160a01b0381165f9081526004602052604090205460ff1661045957604051631de1e2f360e11b81526001600160a01b038216600482015260240161040d565b600180541161047b5760405163c13a62ad60e01b815260040160405180910390fd5b6001600160a01b0381165f818152600460209081526040808320805460ff19169055600180545f19019055519182523392917fa9985bfe49f6c17bb0f43e62d7219c56755d841001f08a8fecb1b3f915390bb591015b60405180910390a350565b335f9081526004602052604090205460ff1661050d5760405163089210c760e11b815233600482015260240161040d565b6001600160a01b0381165f9081526005602052604090205460ff16610550576040516302ecce5560e61b81526001600160a01b038216600482015260240161040d565b6001600160a01b0381165f818152600560209081526040808320805460ff19169055519182523392917f30a462126b4548fc01736cb875141594c6b8ccc30102d880ffea5707eebd58db91016104d1565b335f9081526004602052604090205460ff166105d25760405163089210c760e11b815233600482015260240161040d565b6001600160a01b0381166105f95760405163f6b2911f60e01b815260040160405180910390fd5b6001600160a01b0381165f9081526005602052604090205460ff161561063d576040516303ff5c1160e21b81526001600160a01b038216600482015260240161040d565b6001600160a01b0381165f81815260056020908152604091829020805460ff1916600190811790915591519182523392917f30a462126b4548fc01736cb875141594c6b8ccc30102d880ffea5707eebd58db91016104d1565b335f9081526005602052604090205460ff166106c75760405163510e20cd60e01b815233600482015260240161040d565b5f8290036106e8576040516304a057b360e21b815260040160405180910390fd5b8061070657604051630c96ccbb60e11b815260040160405180910390fd5b60068383604051610718929190610ea2565b908152604051908190036020019020600101546001600160401b03600160a01b909104161561075e5782826040516302ccaee760e61b815260040161040d929190610ed9565b6040805160e081018252828152336020820152426001600160401b038116828401525f606083018190526080830181905260a0830181905260c083015291516006906107ad9087908790610ea2565b9081526040805191829003602090810183208451815590840151600180830180549487015160608801511515600160e01b0260ff60e01b196001600160401b03928316600160a01b026001600160e01b03199098166001600160a01b039096169590951796909617939093169490941790935560808501516002808401805460a089015161ffff16600160401b0269ffffffffffffffffffff19909116939094169290921792909217905560c0909401516003909101558254019091553390839061087b9087908790610ea2565b60405180910390207f3a8d2140bcc8a052a8a26396c97517383b3736b07cedc631d3d07c8de2c036238787866040516108b693929190610ef4565b60405180910390a450505050565b335f9081526004602052604090205460ff166108f55760405163089210c760e11b815233600482015260240161040d565b6001600160a01b03811661091c5760405163f6b2911f60e01b815260040160405180910390fd5b6001600160a01b0381165f9081526004602052604090205460ff161561096057604051632c360dd360e11b81526001600160a01b038216600482015260240161040d565b6001600160a01b0381165f81815260046020908152604091829020805460ff1916600190811790915580548101815591519182523392917fa9985bfe49f6c17bb0f43e62d7219c56755d841001f08a8fecb1b3f915390bb591016104d1565b335f9081526004602052604090205460ff166109f05760405163089210c760e11b815233600482015260240161040d565b5f60068585604051610a03929190610ea2565b90815260405190819003602001902060018101549091506001600160401b03600160a01b909104165f03610a4e5784846040516309a6dcc960e01b815260040161040d929190610ed9565b6001810154600160e01b900460ff1615610a7f57848460405163073adcd760e41b815260040161040d929190610ed9565b8261ffff165f03610aa357604051633e57cc5d60e01b815260040160405180910390fd5b60018181018054600160e01b60ff60e01b19909116179055600282018054426001600160401b03811669ffffffffffffffffffff1990921691909117600160401b61ffff88160217909155600380840185905580549092019091556040513390610b109088908890610ea2565b60405180910390207f620673428bba65eb3b0ec962fd2b10f411bbdecc65ce5e9093b46b4f47b9673d8888858989604051610b4f959493929190610f20565b60405180910390a3505050505050565b5f5f5f5f5f5f5f5f60068a8a604051610b79929190610ea2565b90815260405190819003602001902060018101549091506001600160401b03600160a01b909104165f03610bc45789896040516309a6dcc960e01b815260040161040d929190610ed9565b805460018201546002830154600390930154919c6001600160a01b0382169c50600160a01b82046001600160401b039081169c50600160e01b90920460ff169a509083169850600160401b90920461ffff169650945092505050565b5f546001600160a01b03163314610c4c5760405163089210c760e11b815233600482015260240161040d565b6001600160a01b038116610c735760405163f6b2911f60e01b815260040160405180910390fd5b5f80546001600160a01b038381166001600160a01b03198316811784558352600460205260409092205491169060ff16610d0a576001600160a01b0382165f81815260046020908152604091829020805460ff1916600190811790915580548101815591519182523392917fa9985bfe49f6c17bb0f43e62d7219c56755d841001f08a8fecb1b3f915390bb5910160405180910390a35b816001600160a01b0316816001600160a01b03167f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e060405160405180910390a35050565b5f5f83601f840112610d5e575f5ffd5b5081356001600160401b03811115610d74575f5ffd5b602083019150836020828501011115610d8b575f5ffd5b9250929050565b5f5f60208385031215610da3575f5ffd5b82356001600160401b03811115610db8575f5ffd5b610dc485828601610d4e565b90969095509350505050565b5f5f5f60408486031215610de2575f5ffd5b83356001600160401b03811115610df7575f5ffd5b610e0386828701610d4e565b909790965060209590950135949350505050565b5f60208284031215610e27575f5ffd5b81356001600160a01b0381168114610e3d575f5ffd5b9392505050565b5f5f5f5f60608587031215610e57575f5ffd5b84356001600160401b03811115610e6c575f5ffd5b610e7887828801610d4e565b909550935050602085013561ffff81168114610e92575f5ffd5b9396929550929360400135925050565b818382375f9101908152919050565b81835281816020850137505f828201602090810191909152601f909101601f19169091010190565b602081525f610eec602083018486610eb1565b949350505050565b604081525f610f07604083018587610eb1565b90506001600160401b0383166020830152949350505050565b608081525f610f33608083018789610eb1565b6001600160401b039590951660208301525061ffff9290921660408301526060909101529291505056fea2646970667358221220f5b1f1beb0b382514b04c0b69c050896bb314124c1bcfcbeee0982eb73dde7bd64736f6c63430008250033"
+}
