@@ -26,8 +26,7 @@ export async function getValidatorDashboard(req: Request, res: Response): Promis
 }
 
 export async function verifyCertificateById(req: Request, res: Response): Promise<void> {
-  const { certificateId } = req.params;
-  const cleanId = (certificateId || '').trim();
+  const cleanId = String(req.params.certificateId || '').trim();
 
   if (!cleanId) {
     res.status(400).json({

@@ -3,8 +3,7 @@ import crypto from 'crypto';
 import { certificateModel } from '../models/certificateModel.js';
 
 export async function verifyById(req: Request, res: Response): Promise<void> {
-  const { certificateId } = req.params;
-  const cleanId = (certificateId || '').trim();
+  const cleanId = String(req.params.certificateId || '').trim();
 
   if (!cleanId) {
     res.status(400).json({

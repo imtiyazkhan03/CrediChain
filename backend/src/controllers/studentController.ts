@@ -59,7 +59,7 @@ export async function getStudentCertificateById(req: Request, res: Response): Pr
     return;
   }
 
-  const { certificateId } = req.params;
+  const certificateId = String(req.params.certificateId);
   const cert = await certificateModel.findById(certificateId);
 
   if (!cert) {
@@ -92,7 +92,7 @@ export async function downloadStudentDocument(req: Request, res: Response): Prom
     return;
   }
 
-  const { certificateId } = req.params;
+  const certificateId = String(req.params.certificateId);
   const cert = await certificateModel.findById(certificateId);
 
   if (!cert) {

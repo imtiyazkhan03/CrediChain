@@ -41,7 +41,7 @@ export async function getAllCertificates(req: Request, res: Response): Promise<v
 
 export async function getCertificateById(req: Request, res: Response): Promise<void> {
   const user = req.user;
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   if (!user) {
     res.status(401).json({ error: 'Unauthorized' });
@@ -199,7 +199,7 @@ export async function anchorCertificate(req: Request, res: Response): Promise<vo
     return;
   }
 
-  const { id } = req.params;
+  const id = String(req.params.id);
   const { txHash, fullTxHash, blockNumber, chainId, contractAddress } = req.body;
 
   if (!fullTxHash) {
@@ -241,7 +241,7 @@ export async function revokeCertificate(req: Request, res: Response): Promise<vo
     return;
   }
 
-  const { id } = req.params;
+  const id = String(req.params.id);
   const { reason } = req.body;
 
   try {
@@ -265,7 +265,7 @@ export async function revokeCertificate(req: Request, res: Response): Promise<vo
  */
 export async function downloadDocument(req: Request, res: Response): Promise<void> {
   const user = req.user;
-  const { id } = req.params;
+  const id = String(req.params.id);
 
   if (!user) {
     res.status(401).json({ error: 'Unauthorized' });

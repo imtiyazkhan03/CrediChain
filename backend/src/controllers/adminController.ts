@@ -200,7 +200,7 @@ export async function issueCertificate(req: Request, res: Response): Promise<voi
 }
 
 export async function revokeCertificate(req: Request, res: Response): Promise<void> {
-  const { certificateId } = req.params;
+  const certificateId = String(req.params.certificateId);
   const { reason } = req.body;
 
   try {
