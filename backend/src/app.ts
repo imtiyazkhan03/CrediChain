@@ -162,3 +162,5 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     ...(env.NODE_ENV === 'development' && { stack: errorObj.stack }),
   });
 });
+
+export default app;
