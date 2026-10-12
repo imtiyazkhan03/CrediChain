@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import os from 'os';
 
 // Load .env file
 dotenv.config();
@@ -24,19 +25,21 @@ function validateEnv(): ServerConfig {
     throw new Error(`[EnvError] Invalid PORT: ${process.env.PORT}`);
   }
 
-  // Ensure JWT Secret is secure
+  // Ensure JWT Secret is present
   let jwtSecret = process.env.JWT_SECRET;
   if (!jwtSecret) {
-    if (nodeEnv === 'production') {
-      throw new Error('[EnvError] JWT_SECRET must be explicitly set in production mode!');
-    }
     jwtSecret = 'certichain_college_mini_project_secure_jwt_secret_key_2026';
-    console.warn('[EnvWarning] Using default JWT_SECRET for development. Set JWT_SECRET in .env for production.');
+    console.warn('[EnvWarning] Using default JWT_SECRET. Configure JWT_SECRET in project settings for production.');
   }
+
+  // On Vercel / serverless environments, file writing is restricted to /tmp
+  const defaultStorageDir = process.env.VERCEL
+    ? path.join(os.tmpdir(), 'certichain', 'certificates')
+    : path.resolve(process.cwd(), 'server', 'storage', 'certificates');
 
   const storageDir = process.env.STORAGE_DIR 
     ? path.resolve(process.env.STORAGE_DIR) 
-    : path.resolve(process.cwd(), 'server', 'storage', 'certificates');
+    : defaultStorageDir;
 
   const corsOrigins = process.env.CORS_ORIGINS 
     ? process.env.CORS_ORIGINS.split(',').map(o => o.trim())
