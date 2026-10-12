@@ -45,6 +45,19 @@ app.use(cookieParser());
 app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 
+// Ensure database connection in serverless or container environments
+app.use(async (_req: Request, _res: Response, next: NextFunction) => {
+  if (!isDbConnected()) {
+    try {
+      const { connectDatabase } = await import('./config/db.js');
+      await connectDatabase();
+    } catch {
+      // Gracefully continue using local resilient store fallback
+    }
+  }
+  next();
+});
+
 // Root Welcome Endpoint
 app.get('/', (_req: Request, res: Response) => {
   res.send(`
